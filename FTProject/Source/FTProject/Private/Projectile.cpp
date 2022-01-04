@@ -1,12 +1,43 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "Projectile.h"
 
+#include "EnemyCharacter.h"
+#include "Components/CapsuleComponent.h"
+#include "GameFramework/ProjectileMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
+
 // Sets default values
 AProjectile::AProjectile()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	CollisionComp = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Collision"));
+	CollisionComp->InitCapsuleSize(5.0f, 5.f);
 
+	CollisionComp->OnComponentHit.AddDynamic(this, &AProjectile::OnHit);
+	RootComponent = CollisionComp;
+
+	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComp"));
+	ProjectileMovement->UpdatedComponent = CollisionComp;
+	ProjectileMovement->InitialSpeed = 2000.f;
+	ProjectileMovement->MaxSpeed = 2000.f;
+	ProjectileMovement->bRotationFollowsVelocity = true;
+	InitialLifeSpan = 5.f;
+}
+
+void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+	FVector NormalImpulse, const FHitResult& Hit)
+{
+	if (!OtherActor || OtherActor == this)
+		return;
+
+	AEnemyCharacter* Enemy = Cast<AEnemyCharacter>(OtherActor);
+	if (!Enemy)
+	{
+		Destroy();
+		return;
+	}
+
+	UGameplayStatics::ApplyDamage(Enemy, Damage, GetInstigatorController(), this, UDamageType::StaticClass());
+	Destroy();
 }
 
 // Called when the game starts or when spawned
@@ -16,10 +47,4 @@ void AProjectile::BeginPlay()
 	
 }
 
-// Called every frame
-void AProjectile::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
 
