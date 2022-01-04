@@ -16,16 +16,24 @@ public:
 	AEnemyCharacter();
 
 protected:
+	UPROPERTY()
+	float MaxHealth;
+	UPROPERTY()
+	float CurrentHealth;
+	UPROPERTY()
+	float MovementSpeed;
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-	UPROPERTY()
-	int32 Health = 2;
-
-	UPROPERTY()
-	float MovementSpeed = 270.f;
+	
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+private:
+	void Die();
 };
+
+

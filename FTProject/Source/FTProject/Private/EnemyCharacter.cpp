@@ -7,7 +7,15 @@ AEnemyCharacter::AEnemyCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	MaxHealth = 2.f;
+	CurrentHealth = MaxHealth;
+	MovementSpeed = 270.f;
 
+}
+
+void AEnemyCharacter::Die()
+{
+	Destroy();
 }
 
 // Called when the game starts or when spawned
@@ -15,6 +23,12 @@ void AEnemyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+}
+
+float AEnemyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
+	AActor* DamageCauser)
+{
+	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 }
 
 // Called every frame

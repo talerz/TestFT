@@ -1,7 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "FTProjectCharacter.h"
-#include "HeadMountedDisplayFunctionLibrary.h"
+
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
@@ -43,8 +43,14 @@ AFTProjectCharacter::AFTProjectCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
-	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
-	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
+
+	Weapon = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Weapon"));
+	if(GetMesh())
+		Weapon->SetupAttachment(GetMesh(), FName("Weapon"));
+
+	ProjectileSpawnPoint = CreateDefaultSubobject<USceneComponent>(TEXT("ProjectileSpawn"));
+	if (Weapon)
+		ProjectileSpawnPoint->SetupAttachment(Weapon, FName("Projectile"));
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -67,6 +73,8 @@ void AFTProjectCharacter::SetupPlayerInputComponent(class UInputComponent* Playe
 	PlayerInputComponent->BindAxis("TurnRate", this, &AFTProjectCharacter::TurnAtRate);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("LookUpRate", this, &AFTProjectCharacter::LookUpAtRate);
+
+	PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &AFTProjectCharacter::Fire);
 }
 
 void AFTProjectCharacter::TurnAtRate(float Rate)
@@ -79,6 +87,12 @@ void AFTProjectCharacter::LookUpAtRate(float Rate)
 {
 	// calculate delta for this frame from the rate information
 	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
+}
+
+void AFTProjectCharacter::Fire()
+{
+	UE_LOG(LogTemp, Error, L"FIREE")
+
 }
 
 void AFTProjectCharacter::MoveForward(float Value)
