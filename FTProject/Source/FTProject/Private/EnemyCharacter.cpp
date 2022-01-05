@@ -2,6 +2,10 @@
 
 #include "FTProject/Public/EnemyCharacter.h"
 
+#include "HPBarWidget.h"
+#include "Components/ProgressBar.h"
+#include "Components/WidgetComponent.h"
+
 // Sets default values
 AEnemyCharacter::AEnemyCharacter()
 {
@@ -11,6 +15,12 @@ AEnemyCharacter::AEnemyCharacter()
 	CurrentHealth = MaxHealth;
 	MovementSpeed = 270.f;
 
+	HPBarComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("HP Bar"));
+	if (HPBarComponent)
+	{
+		HPBarComponent->SetWidgetClass(HPBarWidgetClass);
+		HPBarComponent->SetupAttachment(GetMesh());
+	}
 }
 
 void AEnemyCharacter::Die()
@@ -22,11 +32,24 @@ void AEnemyCharacter::Die()
 void AEnemyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	if (HPBarComponent)
+	{
+		HPBarComponent->InitWidget();
+		UHPBarWidget* HPBarWidget = Cast< UHPBarWidget>(HPBarComponent->GetUserWidgetObject());
+		if(!HPBarWidget)
+			return;
+		HPBarWidget->GetHPBar()->PercentDelegate.BindUFunction(this, FName("GetHPPercentage"));
+	}
 }
 
-float AEnemyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
-	AActor* DamageCauser)
+float AEnemyCharacter::GetHPPercentage() const
+{
+	if (MaxHealth <= 0)
+		return 0;
+	return  CurrentHealth / MaxHealth;
+}
+
+float AEnemyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	CurrentHealth -= DamageAmount;
 	if (CurrentHealth <= 0)

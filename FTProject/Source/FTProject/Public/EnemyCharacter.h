@@ -22,10 +22,16 @@ protected:
 	float CurrentHealth;
 	UPROPERTY()
 	float MovementSpeed;
+	UPROPERTY(VisibleAnywhere)
+	class UWidgetComponent* HPBarComponent;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UUserWidget> HPBarWidgetClass;
 
-	// Called when the game starts or when spawned
+	//Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	
+
+	UFUNCTION(BlueprintCallable)
+	float GetHPPercentage() const;
 
 public:	
 	// Called every frame

@@ -12,11 +12,11 @@ APlayerCharacter::APlayerCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	Weapon = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Weapon"));
-	if (GetMesh())
+	if (Weapon && GetMesh())
 		Weapon->SetupAttachment(GetMesh(), FName("Weapon"));
 
 	ProjectileSpawnPoint = CreateDefaultSubobject<USceneComponent>(TEXT("ProjectileSpawn"));
-	if (Weapon)
+	if (ProjectileSpawnPoint && Weapon)
 		ProjectileSpawnPoint->SetupAttachment(Weapon, FName("Projectile"));
 
 	ProjectileClass = AProjectile::StaticClass();
