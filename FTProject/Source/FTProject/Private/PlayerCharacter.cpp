@@ -3,11 +3,23 @@
 
 #include "FTProject/Public/PlayerCharacter.h"
 
+#include "Projectile.h"
+
 // Sets default values
 APlayerCharacter::APlayerCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	Weapon = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Weapon"));
+	if (GetMesh())
+		Weapon->SetupAttachment(GetMesh(), FName("Weapon"));
+
+	ProjectileSpawnPoint = CreateDefaultSubobject<USceneComponent>(TEXT("ProjectileSpawn"));
+	if (Weapon)
+		ProjectileSpawnPoint->SetupAttachment(Weapon, FName("Projectile"));
+
+	ProjectileClass = AProjectile::StaticClass();
 
 }
 
@@ -16,6 +28,14 @@ void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+}
+
+void APlayerCharacter::Fire()
+{
+	UE_LOG(LogTemp, Error, L"FIREE")
+		UWorld* World = GetWorld();
+	if (World && ProjectileClass && ProjectileSpawnPoint)
+		World->SpawnActor<AProjectile>(ProjectileClass, ProjectileSpawnPoint->GetComponentTransform());
 }
 
 // Called every frame

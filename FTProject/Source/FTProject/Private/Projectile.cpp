@@ -30,13 +30,9 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimi
 		return;
 
 	AEnemyCharacter* Enemy = Cast<AEnemyCharacter>(OtherActor);
-	if (!Enemy)
-	{
-		Destroy();
-		return;
-	}
+	if (Enemy)
+		UGameplayStatics::ApplyDamage(Enemy, Damage, GetInstigatorController(), this, UDamageType::StaticClass());
 
-	UGameplayStatics::ApplyDamage(Enemy, Damage, GetInstigatorController(), this, UDamageType::StaticClass());
 	Destroy();
 }
 
@@ -44,7 +40,4 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimi
 void AProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
-
-

@@ -28,6 +28,9 @@ void AEnemyCharacter::BeginPlay()
 float AEnemyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
 	AActor* DamageCauser)
 {
+	CurrentHealth -= DamageAmount;
+	if (CurrentHealth <= 0)
+		Die();
 	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 }
 
