@@ -4,8 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "GameFramework/Character.h"
 #include "Spawner.generated.h"
 
+class APlayerCharacter;
+class AEnemyCharacter;
 UCLASS()
 class FTPROJECT_API ASpawner : public AActor
 {
@@ -19,8 +22,24 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	UPROPERTY(EditAnywhere)
+	int32 EnemyToSpawnCounter;
+	UPROPERTY()
+	int32 CurrentEnemyCounter;
+	UPROPERTY(EditDefaultsOnly)
+	float SpawnRadius;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<ACharacter> EnemyClass;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<ACharacter> PlayerCharClass;
+	UPROPERTY(EditAnywhere)
+	class ATargetPoint* PlayerStart;
 
+	UFUNCTION()
+	void Spawn();
+
+private:
+	void GetSpawnLocations(const FVector& Origin, float const MaxRadius, int32 const EnemiesNumber, TArray<FVector>& Locations) const;
+	bool SpawnCharacter(TSubclassOf<ACharacter> CharacterClass, FVector const SpawnLocation) const;
 };
+
