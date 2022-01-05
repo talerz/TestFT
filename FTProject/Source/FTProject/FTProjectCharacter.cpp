@@ -2,6 +2,7 @@
 
 #include "FTProjectCharacter.h"
 
+#include "Projectile.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
@@ -51,6 +52,8 @@ AFTProjectCharacter::AFTProjectCharacter()
 	ProjectileSpawnPoint = CreateDefaultSubobject<USceneComponent>(TEXT("ProjectileSpawn"));
 	if (Weapon)
 		ProjectileSpawnPoint->SetupAttachment(Weapon, FName("Projectile"));
+
+	ProjectileClass = AProjectile::StaticClass();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -92,7 +95,9 @@ void AFTProjectCharacter::LookUpAtRate(float Rate)
 void AFTProjectCharacter::Fire()
 {
 	UE_LOG(LogTemp, Error, L"FIREE")
-
+	UWorld* World = GetWorld();
+	if (World && ProjectileClass && ProjectileSpawnPoint)
+		World->SpawnActor<AProjectile>(ProjectileClass, ProjectileSpawnPoint->GetComponentTransform());
 }
 
 void AFTProjectCharacter::MoveForward(float Value)
