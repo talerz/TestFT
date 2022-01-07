@@ -13,3 +13,7 @@ AFTProjectGameMode::AFTProjectGameMode()
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
 }
+
+void AFTProjectGameMode::SetSettings(float PCMoveSpeed, float EnemyMoveSpeed, int EnemyNumber, float ShootDist, float DMG, float EnemyHP)
+{
+}

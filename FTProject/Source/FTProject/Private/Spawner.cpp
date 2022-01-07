@@ -28,9 +28,6 @@ void ASpawner::BeginPlay()
 }
  void ASpawner::Spawn()
 {
-	 if (PlayerCharClass && PlayerStart)
-		 SpawnCharacter(PlayerCharClass, PlayerStart->GetActorLocation());
-
 	if(EnemyClass)
 	{
 		TArray<FVector> SpawnLocations;
@@ -41,6 +38,8 @@ void ASpawner::BeginPlay()
 				CurrentEnemyCounter++;
 		}
 	}
+	if (PlayerCharClass && PlayerStart)
+		SpawnCharacter(PlayerCharClass, PlayerStart->GetActorLocation());
 
 }
 

@@ -4,6 +4,7 @@
 #include "FTProject/Public/PlayerCharacter.h"
 
 #include "Projectile.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -21,6 +22,14 @@ APlayerCharacter::APlayerCharacter()
 
 	ProjectileClass = AProjectile::StaticClass();
 
+	MovementSpeed = 270.f;
+	ShootingDistance = 500.f;
+}
+
+void APlayerCharacter::SetupPlayer(float NewMovementSpeed, float NewShootingDistance)
+{
+	GetCharacterMovement()->MaxWalkSpeed = NewMovementSpeed;
+	ShootingDistance = NewShootingDistance;
 }
 
 // Called when the game starts or when spawned

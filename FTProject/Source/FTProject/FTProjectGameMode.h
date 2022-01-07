@@ -13,6 +13,10 @@ class AFTProjectGameMode : public AGameModeBase
 
 public:
 	AFTProjectGameMode();
+
+protected:
+	UFUNCTION(BlueprintCallable)
+	void SetSettings(float PCMoveSpeed, float EnemyMoveSpeed, int EnemyNumber, float ShootDist, float DMG, float EnemyHP);
 };
 
 

@@ -14,6 +14,7 @@ class FTPROJECT_API APlayerCharacter : public ACharacter
 public:
 	// Sets default values for this character's properties
 	APlayerCharacter();
+	void SetupPlayer(float NewMovementSpeed, float NewShootingDistance);
 
 protected:
 	// Called when the game starts or when spawned
@@ -30,6 +31,11 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TSubclassOf<class AProjectile> ProjectileClass;
+
+	UPROPERTY()
+	float MovementSpeed;
+	UPROPERTY(BlueprintReadOnly)
+	float ShootingDistance;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

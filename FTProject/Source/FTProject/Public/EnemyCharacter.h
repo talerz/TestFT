@@ -14,6 +14,7 @@ class FTPROJECT_API AEnemyCharacter : public ACharacter
 public:
 	// Sets default values for this character's properties
 	AEnemyCharacter();
+	void SetupEnemy(float NewMaxHealth, float NewMovementSpeed);
 
 protected:
 	UPROPERTY()
