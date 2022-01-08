@@ -33,7 +33,4 @@ protected:
 	float MovementSpeed;
 	UPROPERTY(BlueprintReadOnly)
 	float ShootingDistance;
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 };

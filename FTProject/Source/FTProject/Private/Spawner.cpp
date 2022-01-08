@@ -2,8 +2,6 @@
 
 
 #include "Spawner.h"
-
-#include "DrawDebugHelpers.h"
 #include "FTGameInstance.h"
 #include "NavigationSystem.h"
 #include "GameFramework/Character.h"
@@ -50,13 +48,7 @@ void ASpawner::BeginPlay()
 		}
 	}
 	if (PlayerCharClass)
-	{
 		SpawnCharacter(PlayerCharClass, PlayerStartLocation);
-
-		UE_LOG(LogTemp, Error, L"START Actual %s", *PlayerStartLocation.ToString());
-		DrawDebugSphere(GetWorld(), PlayerStartLocation, 50.f, 12, FColor::Red, true, 50.f, 0, 5.f);
-	}
-
 }
 
 bool ASpawner::SpawnCharacter(TSubclassOf<ACharacter> CharacterClass, FVector const SpawnLocation) const

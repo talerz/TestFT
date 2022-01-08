@@ -6,6 +6,7 @@
 #include "HPBarWidget.h"
 #include "Components/ProgressBar.h"
 #include "Components/WidgetComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
 AEnemyCharacter::AEnemyCharacter()
@@ -28,7 +29,7 @@ void AEnemyCharacter::SetupEnemy(float NewMaxHealth, float NewMovementSpeed)
 {	
 	MaxHealth = NewMaxHealth <= 0.f ? 2.f : NewMaxHealth;
 	CurrentHealth = MaxHealth;
-	MovementSpeed = NewMovementSpeed <= 0.f ? 270.f : NewMovementSpeed;
+	GetCharacterMovement()->MaxWalkSpeed = NewMovementSpeed <= 0.f ? 270.f : NewMovementSpeed;
 }
 
 void AEnemyCharacter::Die()

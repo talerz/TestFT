@@ -27,4 +27,3 @@ void AMainAIController::OnPossess(APawn* InPawn)
 	AIBlackboardComponent->InitializeBlackboard(*AIBehaviorTree->BlackboardAsset);
 	AIBehaviorTreeComponent->StartTree(*AIBehaviorTree);
 }
-

@@ -48,15 +48,7 @@ void APlayerCharacter::BeginPlay()
 
 void APlayerCharacter::Fire()
 {
-	UE_LOG(LogTemp, Error, L"FIREE")
-		UWorld* World = GetWorld();
+	UWorld* World = GetWorld();
 	if (World && ProjectileClass && ProjectileSpawnPoint)
 		World->SpawnActor<AProjectile>(ProjectileClass, ProjectileSpawnPoint->GetComponentTransform());
-}
-
-// Called every frame
-void APlayerCharacter::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
 }
