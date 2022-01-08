@@ -26,6 +26,6 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UProjectileMovementComponent* ProjectileMovement;
 
-	UPROPERTY()
-	float Damage = 1;
+private:
+	float Damage;
 };

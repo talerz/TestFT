@@ -1,7 +1,11 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "FTProjectGameMode.h"
-#include "FTProjectCharacter.h"
+
+#include "FTGameInstance.h"
+#include "Spawner.h"
+#include "Engine/TargetPoint.h"
+#include "Kismet/GameplayStatics.h"
 #include "UObject/ConstructorHelpers.h"
 
 AFTProjectGameMode::AFTProjectGameMode()
@@ -12,8 +16,34 @@ AFTProjectGameMode::AFTProjectGameMode()
 	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
+	
+	MainSpawner = nullptr;
 }
 
-void AFTProjectGameMode::SetSettings(float PCMoveSpeed, float EnemyMoveSpeed, int EnemyNumber, float ShootDist, float DMG, float EnemyHP)
+void AFTProjectGameMode::Start()
 {
+	UWorld* World = GetWorld();
+	if (!World)
+		return; 
+
+	if(AActor* FoundActor = UGameplayStatics::GetActorOfClass(World, ATargetPoint::StaticClass()))
+	{
+		if(FoundActor && MainSpawnerClass)
+		{
+			if (GetGameInstance())
+			{
+				UFTGameInstance* FTGameInstance = Cast<UFTGameInstance>(GetGameInstance());
+				if (FTGameInstance)
+					FTGameInstance->SetPlayerStartLocation(FoundActor->GetActorLocation());
+			}
+			MainSpawner = World->SpawnActor<ASpawner>(MainSpawnerClass, FoundActor->GetActorLocation(), FRotator::ZeroRotator);
+			
+		}
+	}
+}
+
+void AFTProjectGameMode::StartPlay()
+{
+	Super::StartPlay();
+	Start();
 }

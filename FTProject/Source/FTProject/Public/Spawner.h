@@ -18,27 +18,26 @@ public:
 	// Sets default values for this actor's properties
 	ASpawner();
 
+	void SetupSpawner(int32 NewEnemyToSpawnNumber) { EnemyToSpawnNumber = NewEnemyToSpawnNumber <= 0 ? 5 : NewEnemyToSpawnNumber; }
+	void SetupPlayerLocation(FVector NewPlayerStart) { PlayerStartLocation = NewPlayerStart; }
+
+	void Spawn();
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere)
-	int32 EnemyToSpawnCounter;
-	UPROPERTY()
-	int32 CurrentEnemyCounter;
 	UPROPERTY(EditDefaultsOnly)
 	float SpawnRadius;
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<ACharacter> EnemyClass;
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<ACharacter> PlayerCharClass;
-	UPROPERTY(EditAnywhere)
-	class ATargetPoint* PlayerStart;
-
-	UFUNCTION()
-	void Spawn();
 
 private:
+	int32 EnemyToSpawnNumber;
+	int32 CurrentEnemyCounter;
+	FVector PlayerStartLocation;
+
 	void GetSpawnLocations(const FVector& Origin, float const MaxRadius, int32 const EnemiesNumber, TArray<FVector>& Locations) const;
 	bool SpawnCharacter(TSubclassOf<ACharacter> CharacterClass, FVector const SpawnLocation) const;
 };

@@ -3,6 +3,7 @@
 
 #include "FTProject/Public/PlayerCharacter.h"
 
+#include "FTGameInstance.h"
 #include "Projectile.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
@@ -28,13 +29,19 @@ APlayerCharacter::APlayerCharacter()
 
 void APlayerCharacter::SetupPlayer(float NewMovementSpeed, float NewShootingDistance)
 {
-	GetCharacterMovement()->MaxWalkSpeed = NewMovementSpeed;
-	ShootingDistance = NewShootingDistance;
+	GetCharacterMovement()->MaxWalkSpeed = NewMovementSpeed <=0.f ? 270.f : NewMovementSpeed;
+	ShootingDistance = NewShootingDistance <= 0.f ? 500.f : NewShootingDistance;
 }
 
 // Called when the game starts or when spawned
 void APlayerCharacter::BeginPlay()
 {
+	if (GetGameInstance())
+	{
+		UFTGameInstance* FTGameInstance = Cast<UFTGameInstance>(GetGameInstance());
+		if (FTGameInstance)
+			SetupPlayer(FTGameInstance->GetPCMoveSpeed(), FTGameInstance->GetShootDist());
+	}
 	Super::BeginPlay();
 	
 }

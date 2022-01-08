@@ -35,9 +35,6 @@ protected:
 	float GetHPPercentage() const;
 
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 private:
 	void Die();

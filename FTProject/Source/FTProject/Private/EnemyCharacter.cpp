@@ -2,6 +2,7 @@
 
 #include "FTProject/Public/EnemyCharacter.h"
 
+#include "FTGameInstance.h"
 #include "HPBarWidget.h"
 #include "Components/ProgressBar.h"
 #include "Components/WidgetComponent.h"
@@ -23,6 +24,13 @@ AEnemyCharacter::AEnemyCharacter()
 	}
 }
 
+void AEnemyCharacter::SetupEnemy(float NewMaxHealth, float NewMovementSpeed)
+{	
+	MaxHealth = NewMaxHealth <= 0.f ? 2.f : NewMaxHealth;
+	CurrentHealth = MaxHealth;
+	MovementSpeed = NewMovementSpeed <= 0.f ? 270.f : NewMovementSpeed;
+}
+
 void AEnemyCharacter::Die()
 {
 	Destroy();
@@ -31,15 +39,21 @@ void AEnemyCharacter::Die()
 // Called when the game starts or when spawned
 void AEnemyCharacter::BeginPlay()
 {
-	Super::BeginPlay();
+	if (GetGameInstance())
+	{
+		UFTGameInstance* FTGameInstance = Cast<UFTGameInstance>(GetGameInstance());
+		if (FTGameInstance)
+			SetupEnemy(FTGameInstance->GetEnemyHP(), FTGameInstance->GetEnemyMoveSpeed() );
+	}
 	if (HPBarComponent)
 	{
 		HPBarComponent->InitWidget();
 		UHPBarWidget* HPBarWidget = Cast< UHPBarWidget>(HPBarComponent->GetUserWidgetObject());
-		if(!HPBarWidget)
-			return;
-		HPBarWidget->GetHPBar()->PercentDelegate.BindUFunction(this, FName("GetHPPercentage"));
+		if(HPBarWidget)
+			HPBarWidget->GetHPBar()->PercentDelegate.BindUFunction(this, FName("GetHPPercentage"));
 	}
+
+	Super::BeginPlay();
 }
 
 float AEnemyCharacter::GetHPPercentage() const
@@ -57,10 +71,4 @@ float AEnemyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 }
 
-// Called every frame
-void AEnemyCharacter::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
 

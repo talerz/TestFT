@@ -3,9 +3,10 @@
 
 #include "Spawner.h"
 
+#include "DrawDebugHelpers.h"
+#include "FTGameInstance.h"
 #include "NavigationSystem.h"
 #include "GameFramework/Character.h"
-#include "Engine/TargetPoint.h"
 
 // Sets default values
 ASpawner::ASpawner()
@@ -13,33 +14,48 @@ ASpawner::ASpawner()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
-	EnemyToSpawnCounter = 5;
+	EnemyToSpawnNumber = 5;
 	CurrentEnemyCounter = 0;
 	SpawnRadius = 5000.f;
-	PlayerStart = nullptr;
+	PlayerStartLocation = FVector::ZeroVector;
 }
 
 // Called when the game starts or when spawned
 void ASpawner::BeginPlay()
 {
+	if(GetGameInstance())
+	{
+		UFTGameInstance* FTGameInstance = Cast<UFTGameInstance>(GetGameInstance());
+		if (FTGameInstance)
+		{
+			SetupSpawner(FTGameInstance->GetEnemyNumber());
+			SetupPlayerLocation(FTGameInstance->GetPlayerStartLocation());
+		}
+	}
 	Super::BeginPlay();
 	Spawn();
-	
 }
+
  void ASpawner::Spawn()
 {
+
 	if(EnemyClass)
 	{
 		TArray<FVector> SpawnLocations;
-		GetSpawnLocations(GetActorLocation(), SpawnRadius, EnemyToSpawnCounter, SpawnLocations);
-		for (int32 i = 0; i < EnemyToSpawnCounter; i++)
+		GetSpawnLocations(GetActorLocation(), SpawnRadius, EnemyToSpawnNumber, SpawnLocations);
+		for (int32 i = 0; i < EnemyToSpawnNumber; i++)
 		{
 			if (SpawnCharacter(EnemyClass, SpawnLocations[i]))
 				CurrentEnemyCounter++;
 		}
 	}
-	if (PlayerCharClass && PlayerStart)
-		SpawnCharacter(PlayerCharClass, PlayerStart->GetActorLocation());
+	if (PlayerCharClass)
+	{
+		SpawnCharacter(PlayerCharClass, PlayerStartLocation);
+
+		UE_LOG(LogTemp, Error, L"START Actual %s", *PlayerStartLocation.ToString());
+		DrawDebugSphere(GetWorld(), PlayerStartLocation, 50.f, 12, FColor::Red, true, 50.f, 0, 5.f);
+	}
 
 }
 
@@ -63,7 +79,6 @@ void ASpawner::GetSpawnLocations(const FVector& Origin, float const MaxRadius, i
 	if (!NavigationSystem)
 		return;
 
-
 	for(int32 i = 0 ; i < EnemiesNumber; i++)
 	{
 		FNavLocation NavLocation;
@@ -72,6 +87,5 @@ void ASpawner::GetSpawnLocations(const FVector& Origin, float const MaxRadius, i
 	
 		Locations.Add(NavLocation.Location);
 	}
-
 }
 

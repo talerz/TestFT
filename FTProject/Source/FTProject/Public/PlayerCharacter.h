@@ -25,13 +25,10 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	USceneComponent* ProjectileSpawnPoint;
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	USkeletalMeshComponent* Weapon;
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TSubclassOf<class AProjectile> ProjectileClass;
-
 	UPROPERTY()
 	float MovementSpeed;
 	UPROPERTY(BlueprintReadOnly)

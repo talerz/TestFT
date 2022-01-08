@@ -6,6 +6,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "FTProjectGameMode.generated.h"
 
+class ASpawner;
 UCLASS(minimalapi)
 class AFTProjectGameMode : public AGameModeBase
 {
@@ -14,9 +15,14 @@ class AFTProjectGameMode : public AGameModeBase
 public:
 	AFTProjectGameMode();
 
+	void Start();
+	virtual void StartPlay() override;
+
 protected:
-	UFUNCTION(BlueprintCallable)
-	void SetSettings(float PCMoveSpeed, float EnemyMoveSpeed, int EnemyNumber, float ShootDist, float DMG, float EnemyHP);
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<ASpawner> MainSpawnerClass;
+	UPROPERTY()
+	class ASpawner* MainSpawner;
 };
 
 
