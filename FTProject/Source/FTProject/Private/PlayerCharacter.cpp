@@ -43,7 +43,6 @@ void APlayerCharacter::BeginPlay()
 			SetupPlayer(FTGameInstance->GetPCMoveSpeed(), FTGameInstance->GetShootDist());
 	}
 	Super::BeginPlay();
-	
 }
 
 void APlayerCharacter::Fire()

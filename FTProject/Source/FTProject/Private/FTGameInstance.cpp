@@ -4,7 +4,7 @@
 #include "FTGameInstance.h"
 
 void UFTGameInstance::SetSettings(float NewPCMoveSpeed, float NewEnemyMoveSpeed, int NewEnemyNumber, float NewShootDist,
-	float NewDMG, float NewEnemyHP)
+                                  float NewDMG, float NewEnemyHP)
 {
 	PCMoveSpeed = NewPCMoveSpeed;
 	EnemyMoveSpeed = NewEnemyMoveSpeed;

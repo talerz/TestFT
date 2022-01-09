@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "FTGameInstance.h"
 #include "GameFramework/Character.h"
 #include "EnemyCharacter.generated.h"
 
@@ -27,6 +28,8 @@ protected:
 	class UWidgetComponent* HPBarComponent;
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UUserWidget> HPBarWidgetClass;
+	UPROPERTY()
+	UFTGameInstance* FTGameInstance;
 
 	//Called when the game starts or when spawned
 	virtual void BeginPlay() override;

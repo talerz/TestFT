@@ -6,7 +6,9 @@
 #include "HPBarWidget.h"
 #include "Components/ProgressBar.h"
 #include "Components/WidgetComponent.h"
+#include "FTProject/FTProjectGameMode.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AEnemyCharacter::AEnemyCharacter()
@@ -34,6 +36,13 @@ void AEnemyCharacter::SetupEnemy(float NewMaxHealth, float NewMovementSpeed)
 
 void AEnemyCharacter::Die()
 {
+	UWorld* World = GetWorld();
+	if (World && UGameplayStatics::GetGameMode(World))
+	{
+		AFTProjectGameMode* FTGameMode = Cast<AFTProjectGameMode>(UGameplayStatics::GetGameMode(World));
+		if(FTGameMode)
+			FTGameMode->RemoveKilledEnemy(this);
+	}
 	Destroy();
 }
 
@@ -42,7 +51,7 @@ void AEnemyCharacter::BeginPlay()
 {
 	if (GetGameInstance())
 	{
-		UFTGameInstance* FTGameInstance = Cast<UFTGameInstance>(GetGameInstance());
+		FTGameInstance = Cast<UFTGameInstance>(GetGameInstance());
 		if (FTGameInstance)
 			SetupEnemy(FTGameInstance->GetEnemyHP(), FTGameInstance->GetEnemyMoveSpeed() );
 	}
@@ -71,5 +80,3 @@ float AEnemyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 		Die();
 	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 }
-
-

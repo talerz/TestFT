@@ -2,9 +2,13 @@
 
 
 #include "Spawner.h"
+
+#include "EnemyCharacter.h"
 #include "FTGameInstance.h"
 #include "NavigationSystem.h"
+#include "FTProject/FTProjectGameMode.h"
 #include "GameFramework/Character.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ASpawner::ASpawner()
@@ -23,19 +27,23 @@ void ASpawner::BeginPlay()
 {
 	if(GetGameInstance())
 	{
-		UFTGameInstance* FTGameInstance = Cast<UFTGameInstance>(GetGameInstance());
+		FTGameInstance = Cast<UFTGameInstance>(GetGameInstance());
 		if (FTGameInstance)
 		{
 			SetupSpawner(FTGameInstance->GetEnemyNumber());
 			SetupPlayerLocation(FTGameInstance->GetPlayerStartLocation());
 		}
 	}
+	UWorld* World = GetWorld();
+	if (World && UGameplayStatics::GetGameMode(World))
+		FTGameMode = Cast<AFTProjectGameMode>(UGameplayStatics::GetGameMode(World));
 	Super::BeginPlay();
 	Spawn();
 }
 
  void ASpawner::Spawn()
 {
+	CurrentEnemyCounter = 0;
 
 	if(EnemyClass)
 	{
@@ -47,17 +55,25 @@ void ASpawner::BeginPlay()
 				CurrentEnemyCounter++;
 		}
 	}
+
+	if (FTGameMode)
+		FTGameMode->SetCurrentEnemyCounter(CurrentEnemyCounter);
+
 	if (PlayerCharClass)
 		SpawnCharacter(PlayerCharClass, PlayerStartLocation);
 }
 
-bool ASpawner::SpawnCharacter(TSubclassOf<ACharacter> CharacterClass, FVector const SpawnLocation) const
+bool ASpawner::SpawnCharacter(const TSubclassOf<ACharacter> CharacterClass, FVector const SpawnLocation) 
 {
 	UWorld* World = GetWorld();
 
-	auto SpawnedCharacter = World->SpawnActor<ACharacter>(CharacterClass, SpawnLocation, FRotator::ZeroRotator);
+	ACharacter* SpawnedCharacter = World->SpawnActor<ACharacter>(CharacterClass, SpawnLocation, FRotator::ZeroRotator);
 	if (SpawnedCharacter)
+	{
+		if (Cast<AEnemyCharacter>(SpawnedCharacter) && FTGameMode)
+			FTGameMode->AddSpawnedEnemies(SpawnedCharacter);
 		return true;
+	}
 	return false;
 }
 
@@ -80,4 +96,3 @@ void ASpawner::GetSpawnLocations(const FVector& Origin, float const MaxRadius, i
 		Locations.Add(NavLocation.Location);
 	}
 }
-

@@ -45,5 +45,36 @@ void AFTProjectGameMode::Start()
 void AFTProjectGameMode::StartPlay()
 {
 	Super::StartPlay();
+	ClearSpawnedEnemies();
 	Start();
+}
+
+
+void AFTProjectGameMode::ClearSpawnedEnemies()
+{
+	SpawnedEnemies.Empty();
+}
+
+void AFTProjectGameMode::AddSpawnedEnemies(ACharacter* NewEnemy)
+{
+	SpawnedEnemies.Add(NewEnemy);
+}
+
+void AFTProjectGameMode::RemoveKilledEnemy(ACharacter* KilledEnemy)
+{
+	SpawnedEnemies.Remove(KilledEnemy);
+	CurrentEnemyCounter--;
+	if (CurrentEnemyCounter <= 0)
+	{
+		OnEnemiesKilled.Broadcast(true);
+		UE_LOG(LogTemp, Error, L"ALL KILLED")
+	}
+}
+
+ACharacter* AFTProjectGameMode::FindRandomEnemy()
+{
+	if (SpawnedEnemies.Num() <= 0)
+		return nullptr;
+
+	return SpawnedEnemies[FMath::RandRange(0, SpawnedEnemies.Num() - 1)];
 }
