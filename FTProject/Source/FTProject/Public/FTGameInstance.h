@@ -18,6 +18,7 @@ public:
 
 	float GetPCMoveSpeed() const { return PCMoveSpeed; }
 	float GetEnemyMoveSpeed() const { return EnemyMoveSpeed; }
+	UFUNCTION(BlueprintCallable)
 	int32 GetEnemyNumber() const { return EnemyNumber; }
 	float GetShootDist() const { return ShootDist; }
 	float GetDMG() const { return DMG; }

@@ -6,7 +6,6 @@
 #include "Spawner.h"
 #include "Engine/TargetPoint.h"
 #include "Kismet/GameplayStatics.h"
-#include "UObject/ConstructorHelpers.h"
 
 AFTProjectGameMode::AFTProjectGameMode()
 {

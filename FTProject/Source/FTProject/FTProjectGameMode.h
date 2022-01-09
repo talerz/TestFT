@@ -19,9 +19,9 @@ public:
 
 	void Start();
 	virtual void StartPlay() override;
-	float GetCurrentEnemyCounter() const { return CurrentEnemyCounter; }
-
-	void SetCurrentEnemyCounter(int32 NewCurrentEnemyCounter) { CurrentEnemyCounter = NewCurrentEnemyCounter; }
+	UFUNCTION(BlueprintCallable)
+	int32 GetCurrentEnemyCounter() const { return CurrentEnemyCounter; }
+	void SetCurrentEnemyCounter(const int32 NewCurrentEnemyCounter) { CurrentEnemyCounter = NewCurrentEnemyCounter; }
 	void ClearSpawnedEnemies();
 	void AddSpawnedEnemies(class ACharacter* NewEnemy);
 	void RemoveKilledEnemy(class ACharacter* KilledEnemy);
