@@ -4,6 +4,7 @@
 #include "FTProject/Public/PlayerCharacter.h"
 
 #include "FTGameInstance.h"
+#include "MainAIController.h"
 #include "Projectile.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
@@ -31,6 +32,12 @@ void APlayerCharacter::SetupPlayer(float NewMovementSpeed, float NewShootingDist
 {
 	GetCharacterMovement()->MaxWalkSpeed = NewMovementSpeed <=0.f ? 270.f : NewMovementSpeed;
 	ShootingDistance = NewShootingDistance <= 0.f ? 500.f : NewShootingDistance;
+	if(GetController())
+	{
+		AMainAIController* MainController = Cast<AMainAIController>(GetController());
+		if (MainController)
+			MainController->SetPCShootingDistance(ShootingDistance);
+	}
 }
 
 // Called when the game starts or when spawned

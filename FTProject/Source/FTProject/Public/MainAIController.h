@@ -17,7 +17,9 @@ public:
 	AMainAIController();
 
 	virtual void OnPossess(APawn* InPawn) override;
+	void SetPCShootingDistance(float const NewPCShootingDistance) const;
 protected:
+
 	UPROPERTY()
 	class UBehaviorTreeComponent* AIBehaviorTreeComponent;
 	UPROPERTY(BlueprintReadOnly)
@@ -27,4 +29,7 @@ protected:
 	class UBehaviorTree* AIBehaviorTree;
 	UPROPERTY(BlueprintReadOnly)
 	class ACharacter* CachedCharacter;
+
+private:
+	float PCShootingDistance;
 };

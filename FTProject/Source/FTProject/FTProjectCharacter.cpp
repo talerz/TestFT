@@ -43,17 +43,6 @@ AFTProjectCharacter::AFTProjectCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
-
-
-	Weapon = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Weapon"));
-	if(GetMesh())
-		Weapon->SetupAttachment(GetMesh(), FName("Weapon"));
-
-	ProjectileSpawnPoint = CreateDefaultSubobject<USceneComponent>(TEXT("ProjectileSpawn"));
-	if (Weapon)
-		ProjectileSpawnPoint->SetupAttachment(Weapon, FName("Projectile"));
-
-	ProjectileClass = AProjectile::StaticClass();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -63,8 +52,6 @@ void AFTProjectCharacter::SetupPlayerInputComponent(class UInputComponent* Playe
 {
 	// Set up gameplay key bindings
 	check(PlayerInputComponent);
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
-	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AFTProjectCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AFTProjectCharacter::MoveRight);
@@ -76,8 +63,6 @@ void AFTProjectCharacter::SetupPlayerInputComponent(class UInputComponent* Playe
 	PlayerInputComponent->BindAxis("TurnRate", this, &AFTProjectCharacter::TurnAtRate);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("LookUpRate", this, &AFTProjectCharacter::LookUpAtRate);
-
-	PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &AFTProjectCharacter::Fire);
 }
 
 void AFTProjectCharacter::TurnAtRate(float Rate)
@@ -90,14 +75,6 @@ void AFTProjectCharacter::LookUpAtRate(float Rate)
 {
 	// calculate delta for this frame from the rate information
 	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
-}
-
-void AFTProjectCharacter::Fire()
-{
-	UE_LOG(LogTemp, Error, L"FIREE")
-	UWorld* World = GetWorld();
-	if (World && ProjectileClass && ProjectileSpawnPoint)
-		World->SpawnActor<AProjectile>(ProjectileClass, ProjectileSpawnPoint->GetComponentTransform());
 }
 
 void AFTProjectCharacter::MoveForward(float Value)

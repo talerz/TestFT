@@ -53,6 +53,9 @@ void ASpawner::BeginPlay()
 	{
 		TArray<FVector> SpawnLocations;
 		GetSpawnLocations(GetActorLocation(), SpawnRadius, EnemyToSpawnNumber, SpawnLocations);
+		if(SpawnLocations.Num() <= 0)
+			return;
+
 		for (int32 i = 0; i < EnemyToSpawnNumber; i++)
 		{
 			if (SpawnCharacter(EnemyClass, SpawnLocations[i]))

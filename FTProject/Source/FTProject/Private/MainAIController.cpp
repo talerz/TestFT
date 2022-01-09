@@ -47,5 +47,15 @@ void AMainAIController::OnPossess(APawn* InPawn)
 		if (PlayerCharacter)
 			AIBlackboardComponent->SetValueAsFloat("ShootingRadius", PlayerCharacter->GetShootingDist());
 	}
-	
+}
+
+void AMainAIController::SetPCShootingDistance(float const NewPCShootingDistance) const
+{
+	if (CachedCharacter)
+	{
+		AIBlackboardComponent->ClearValue("ShootingRadius");
+		class APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(CachedCharacter);
+		if (PlayerCharacter)
+			AIBlackboardComponent->SetValueAsFloat("ShootingRadius", NewPCShootingDistance);
+	}
 }

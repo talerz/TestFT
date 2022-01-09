@@ -53,17 +53,6 @@ protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	// End of APawn interface
 
-	UFUNCTION()
-	void Fire();
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	USceneComponent* ProjectileSpawnPoint;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	USkeletalMeshComponent* Weapon;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TSubclassOf<class AProjectile> ProjectileClass;
 public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
