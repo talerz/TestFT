@@ -36,7 +36,11 @@ void ASpawner::BeginPlay()
 	}
 	UWorld* World = GetWorld();
 	if (World && UGameplayStatics::GetGameMode(World))
+	{
 		FTGameMode = Cast<AFTProjectGameMode>(UGameplayStatics::GetGameMode(World));
+		if (FTGameMode)
+			FTGameMode->ClearSpawnedEnemies();
+	}
 	Super::BeginPlay();
 	Spawn();
 }

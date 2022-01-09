@@ -65,10 +65,7 @@ void AFTProjectGameMode::RemoveKilledEnemy(ACharacter* KilledEnemy)
 	SpawnedEnemies.Remove(KilledEnemy);
 	CurrentEnemyCounter--;
 	if (CurrentEnemyCounter <= 0)
-	{
 		OnEnemiesKilled.Broadcast(true);
-		UE_LOG(LogTemp, Error, L"ALL KILLED")
-	}
 }
 
 ACharacter* AFTProjectGameMode::FindRandomEnemy()
