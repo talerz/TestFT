@@ -4,7 +4,6 @@
 #include "EnemyCharacter.h"
 #include "FTGameInstance.h"
 #include "Components/CapsuleComponent.h"
-#include "FTProject/FTProjectGameMode.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 

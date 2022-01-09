@@ -3,10 +3,13 @@
 
 #include "FTProject/Public/MainAIController.h"
 
+#include "FTProject/Public/PlayerCharacter.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "FTProject/FTProjectGameMode.h"
 #include "GameFramework/Character.h"
+#include "Kismet/GameplayStatics.h"
 
 AMainAIController::AMainAIController()
 {
@@ -26,4 +29,23 @@ void AMainAIController::OnPossess(APawn* InPawn)
 
 	AIBlackboardComponent->InitializeBlackboard(*AIBehaviorTree->BlackboardAsset);
 	AIBehaviorTreeComponent->StartTree(*AIBehaviorTree);
+
+	UWorld* World = GetWorld();
+	class AFTProjectGameMode* FTGameMode = nullptr;
+	if (World && UGameplayStatics::GetGameMode(World))
+		FTGameMode = Cast<AFTProjectGameMode>(UGameplayStatics::GetGameMode(World));
+
+	AIBlackboardComponent->ClearValue("Target");
+	AIBlackboardComponent->ClearValue("ShootingRadius");
+
+	if (FTGameMode)
+		AIBlackboardComponent->SetValueAsObject("Target", FTGameMode->FindRandomEnemy());
+
+	if (CachedCharacter)
+	{
+		class APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(CachedCharacter);
+		if (PlayerCharacter)
+			AIBlackboardComponent->SetValueAsFloat("ShootingRadius", PlayerCharacter->GetShootingDist());
+	}
+	
 }

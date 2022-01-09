@@ -15,7 +15,7 @@ public:
 	// Sets default values for this character's properties
 	APlayerCharacter();
 	void SetupPlayer(float NewMovementSpeed, float NewShootingDistance);
-
+	float GetShootingDist() { return ShootingDistance; }
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

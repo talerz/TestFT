@@ -25,6 +25,7 @@ public:
 	void ClearSpawnedEnemies();
 	void AddSpawnedEnemies(class ACharacter* NewEnemy);
 	void RemoveKilledEnemy(class ACharacter* KilledEnemy);
+	UFUNCTION(BlueprintCallable)
 	class ACharacter* FindRandomEnemy();
 
 	UPROPERTY(BlueprintAssignable)
