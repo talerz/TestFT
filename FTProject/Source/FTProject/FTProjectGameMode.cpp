@@ -29,7 +29,6 @@ void AFTProjectGameMode::Start()
 					FTGameInstance->SetPlayerStartLocation(FoundActor->GetActorLocation());
 			}
 			MainSpawner = World->SpawnActor<ASpawner>(MainSpawnerClass, FoundActor->GetActorLocation(), FRotator::ZeroRotator);
-			
 		}
 	}
 }
@@ -40,7 +39,6 @@ void AFTProjectGameMode::StartPlay()
 	ClearSpawnedEnemies();
 	Start();
 }
-
 
 void AFTProjectGameMode::ClearSpawnedEnemies()
 {
@@ -54,7 +52,8 @@ void AFTProjectGameMode::AddSpawnedEnemies(ACharacter* NewEnemy)
 
 void AFTProjectGameMode::RemoveKilledEnemy(ACharacter* KilledEnemy)
 {
-	SpawnedEnemies.Remove(KilledEnemy);
+	if (SpawnedEnemies.Num() > 0 && KilledEnemy)
+		SpawnedEnemies.Remove(KilledEnemy);
 	CurrentEnemyCounter--;
 	if (CurrentEnemyCounter <= 0)
 		OnEnemiesKilled.Broadcast(true);

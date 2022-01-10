@@ -27,7 +27,7 @@ public:
 
 protected:
 	UFUNCTION(BlueprintCallable)
-		void SetSettings(float NewPCMoveSpeed, float NewEnemyMoveSpeed, int NewEnemyNumber, float NewShootDist, float NewDMG, float NewEnemyHP);
+	void SetSettings(float NewPCMoveSpeed, float NewEnemyMoveSpeed, int NewEnemyNumber, float NewShootDist, float NewDMG, float NewEnemyHP);
 
 private:
 	float PCMoveSpeed;
